@@ -1,0 +1,22 @@
+{
+  "root": true,
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "prettier"],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "env": {
+    "es2022": true,
+    "browser": false,
+    "node": true,
+    "mocha": true
+  },
+  "globals": {
+    "artifacts": "readonly",
+    "contract": "readonly",
+    "web3": "readonly",
+    "extendEnvironment": "readonly",
+    "expect": "readonly"
+  },
+  "rules": {
+    "prefer-const": "warn"
+  }
+}

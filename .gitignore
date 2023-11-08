@@ -1,0 +1,32 @@
+### foundry-rs
+# Compiler files
+cache/
+out/
+
+# Development broadcast logs
+!/broadcast
+/broadcast/*/31337/
+/broadcast/**/dry-run/
+
+# Docs
+docs/
+
+# Dotenv file
+.env
+
+### hardhat
+artifacts/
+cache_hardhat/
+coverage/
+coverage.json
+typechain
+typechain-types
+dist/
+export/
+
+# Development deployments
+deployments/localhost/
+deployments/hardhat/
+
+### Node.js
+node_modules/
