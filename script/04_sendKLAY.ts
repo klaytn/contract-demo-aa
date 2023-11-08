@@ -1,8 +1,14 @@
-import { getCounterfactualAddress, getEnv } from "./helper";
+import { getGoogleAccountAPI } from "./helper";
 
 async function main() {
-  const { owner, sub } = await getEnv();
-  const counterfactualAddress = await getCounterfactualAddress(owner.address, sub);
+  if (!process.env.PRIVATE_KEY) {
+    console.error("PRIVATE_KEY is not set. Please run `npx hardhat 01_createOwner.ts`");
+    process.exit(1);
+  }
+
+  const [owner] = await hre.ethers.getSigners();
+  const walletAPI = await getGoogleAccountAPI();
+  const counterfactualAddress = await walletAPI.getAccountAddress();
   const tx = await owner.sendTransaction({
     to: counterfactualAddress,
     value: hre.ethers.utils.parseEther("1"),

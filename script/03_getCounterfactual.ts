@@ -1,9 +1,8 @@
-import { getCounterfactualAddress, getEnv } from "./helper";
+import { getGoogleAccountAPI } from "./helper";
 
 async function main() {
-  const { owner, sub } = await getEnv();
-  const counterfactualAddress = await getCounterfactualAddress(owner.address, sub);
-  console.log("Counterfactual address", counterfactualAddress);
+  const walletAPI = await getGoogleAccountAPI();
+  console.log("Counterfactual address", await walletAPI.getAccountAddress());
 }
 
 // We recommend this pattern to be able to use async/await everywhere

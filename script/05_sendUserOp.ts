@@ -1,18 +1,8 @@
 import { HttpRpcClient } from "@account-abstraction/sdk";
-import { BoardAddress, EntryPointAddress, GoogleAccountAPI, GoogleAccountFactoryAddress, getEnv } from "./helper";
+import { BoardAddress, EntryPointAddress, getGoogleAccountAPI } from "./helper";
 
 async function createUserOp(content: string) {
-  const { owner, sub } = await getEnv();
-  const walletAPI = new GoogleAccountAPI({
-    provider: hre.ethers.provider,
-    owner,
-    sub: sub,
-
-    // constants
-    entryPointAddress: EntryPointAddress,
-    factoryAddress: GoogleAccountFactoryAddress,
-    overheads: { fixed: 50000 },
-  });
+  const walletAPI = await getGoogleAccountAPI();
   const board = await hre.ethers.getContractAt("Board", BoardAddress);
 
   return await walletAPI.createSignedUserOp({

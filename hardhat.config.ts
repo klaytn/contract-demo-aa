@@ -5,7 +5,7 @@ import "@klaytn/hardhat-utils";
 import "@primitivefi/hardhat-dodoc";
 import "dotenv/config";
 
-const defaultKey = "";
+const defaultKey = "0x000000000000000000000000000000000000000000000000000000000000dead";
 
 const config: HardhatUserConfig = {
   solidity: {
@@ -21,13 +21,13 @@ const config: HardhatUserConfig = {
       url: process.env.BAOBAB_URL || "https://archive-en.baobab.klaytn.net",
       bundler: "http://13.125.147.214:4337",
       chainId: 1001,
-      accounts: [process.env.PRIVATE_KEY || defaultKey],
+      accounts: [process.env.PRIVATE_KEY || defaultKey, process.env.NEW_PRIVATE_KEY || defaultKey],
       live: true,
       saveDeployments: true,
     },
     localhost: {
       url: "http://127.0.0.1:8545",
-      accounts: [process.env.PRIVATE_KEY || defaultKey],
+      accounts: [process.env.PRIVATE_KEY || defaultKey, process.env.NEW_PRIVATE_KEY || defaultKey],
       live: false,
       saveDeployments: true,
     },
