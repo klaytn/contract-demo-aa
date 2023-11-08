@@ -2,7 +2,8 @@ import { getGoogleAccountAPI } from "./helper";
 
 async function main() {
   if (!process.env.PRIVATE_KEY) {
-    console.error("PRIVATE_KEY is not set. Please run `npx hardhat 01_createOwner.ts`");
+    console.error("JWT does not exist in `.env` file. Please run `npx hardhat 01_createOwner.ts`");
+
     process.exit(1);
   }
 

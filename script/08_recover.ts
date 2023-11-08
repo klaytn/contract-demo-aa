@@ -1,15 +1,18 @@
-import { getGoogleAccountAPI } from "./helper";
+import { getGoogleAccountAPI, parseJwt } from "./helper";
 
 async function main() {
-  const [, newOwner] = await hre.ethers.getSigners();
-  if (!process.env.NEW_PRIVATE_KEY) {
-    console.error("NEW_PRIVATE_KEY is not set. Please run `npx hardhat 06_createNewOwner.ts`");
+  const jwt = process.env.JWT;
+  if (!jwt) {
+    console.error("JWT does not exist in `.env` file. Please run `npx hardhat 07_getJwt.ts`");
     process.exit(1);
   }
-  const walletAPI = await getGoogleAccountAPI();
-  const scwAddress = await walletAPI.getAccountAddress();
 
-  walletAPI.recover(newOwner.address);
+  const [newOwner] = await hre.ethers.getSigners();
+  const walletAPI = await getGoogleAccountAPI();
+  const { header, idToken, sig } = parseJwt(jwt);
+  await walletAPI.recover(newOwner.address, header, idToken, sig);
+
+  console.log("New owner:", await walletAPI.getOwner());
 }
 
 // We recommend this pattern to be able to use async/await everywhere

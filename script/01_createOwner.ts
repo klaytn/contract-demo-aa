@@ -2,8 +2,8 @@ import { appendEnv } from "./helper";
 
 async function main() {
   if (process.env.PRIVATE_KEY) {
-    console.error("PRIVATE_KEY already exists in `.env` file");
-    return;
+    console.error("PRIVATE_KEY already exists in `.env` file. Exiting...");
+    process.exit(1);
   }
 
   const wallet = hre.ethers.Wallet.createRandom();

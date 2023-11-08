@@ -2,7 +2,7 @@ import { appendEnv, getJwt, parseJwt } from "./helper";
 
 async function main() {
   if (!process.env.SUB) {
-    console.error("SUB already exists. Exiting...");
+    console.error("SUB already exists in `.env` file. Exiting...");
     process.exit(1);
   }
 
