@@ -8,8 +8,19 @@ export const BoardAddress = "0x6EBc87749C2d618F3eE13F8A5d6293986794326a";
 export const EntryPointAddress = "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789";
 export const GoogleAccountFactoryAddress = "0x59dBa8ea57D435b00BF74B7CE306215E5f810523";
 export const envPath = __dirname + "/../.env";
-export function appendEnv(key: string, val: string) {
-  fs.appendFileSync(envPath, `${key}=${val}\n`);
+export function insertEnv(key: string, val: string) {
+  if (fs.existsSync(envPath)) {
+    let s = fs.readFileSync(envPath, "utf-8");
+    const pat = new RegExp("^" + key + "=(.*)$", "gm");
+    if (pat.test(s)) {
+      s = s.replace(pat, `${key}=${val}`);
+      fs.writeFileSync(envPath, s);
+    } else {
+      fs.appendFileSync(envPath, `${key}=${val}\n`);
+    }
+  } else {
+    fs.appendFileSync(envPath, `${key}=${val}\n`);
+  }
 }
 
 export function generateSub(): string {
@@ -23,20 +34,28 @@ export function generateSub(): string {
   return sub;
 }
 
-export async function getEnv() {
+function _getInitialOwnerAddress() {
+  const addr = process.env.INITIAL_OWNER_ADDRESS;
+  if (!addr) {
+    console.error("INITIAL_OWNER_ADDRESS is not set. Please run `npx hardhat 01_createOwner.ts`");
+    process.exit(1);
+  }
+  return addr;
+}
+
+function _getSub() {
   const sub = process.env.SUB;
   if (!sub) {
     console.error("SUB is not set. Please run `npx hardhat 02_getJwt.ts`");
     process.exit(1);
   }
-  return { sub };
+  return sub;
 }
 
 export async function getJwt(nonce: string) {
   let sub = process.env.SUB;
   if (!sub) {
     sub = generateSub();
-    appendEnv("SUB", sub);
   }
   const now = Math.floor(new Date().getTime() / 1000);
   const idToken = {
@@ -59,7 +78,8 @@ export async function getJwt(nonce: string) {
 }
 
 export interface GoogleAccountApiParams extends BaseApiParams {
-  owner: ethers.Signer;
+  sender: ethers.Signer;
+  initialOwnerAddr: string;
   sub: string;
   factoryAddress?: string;
   index?: ethers.BigNumberish;
@@ -67,7 +87,8 @@ export interface GoogleAccountApiParams extends BaseApiParams {
 
 export class GoogleAccountAPI extends BaseAccountAPI {
   factoryAddress?: string;
-  owner: ethers.Signer;
+  sender: ethers.Signer;
+  initialOwnerAddr: string;
   index: ethers.BigNumberish;
   sub: string;
 
@@ -77,7 +98,8 @@ export class GoogleAccountAPI extends BaseAccountAPI {
   constructor(params: GoogleAccountApiParams) {
     super(params);
     this.factoryAddress = params.factoryAddress;
-    this.owner = params.owner;
+    this.sender = params.sender;
+    this.initialOwnerAddr = params.initialOwnerAddr;
     this.index = ethers.BigNumber.from(params.index ?? 0);
     this.sub = params.sub;
   }
@@ -99,7 +121,7 @@ export class GoogleAccountAPI extends BaseAccountAPI {
     }
     return hexConcat([
       this.factory.address,
-      this.factory.interface.encodeFunctionData("createAccount", [await this.owner.getAddress(), this.index, this.sub]),
+      this.factory.interface.encodeFunctionData("createAccount", [this.initialOwnerAddr, this.index, this.sub]),
     ]);
   }
 
@@ -134,7 +156,7 @@ export class GoogleAccountAPI extends BaseAccountAPI {
   }
 
   async signUserOpHash(userOpHash: string): Promise<string> {
-    return await this.owner.signMessage(arrayify(userOpHash));
+    return await this.sender.signMessage(arrayify(userOpHash));
   }
 }
 
@@ -148,12 +170,12 @@ export function parseJwt(jwtToken: string) {
 }
 
 export async function getGoogleAccountAPI() {
-  const { sub } = await getEnv();
   const [owner] = await hre.ethers.getSigners();
   const walletAPI = new GoogleAccountAPI({
     provider: hre.ethers.provider,
-    owner,
-    sub: sub,
+    sender: owner,
+    initialOwnerAddr: _getInitialOwnerAddress(),
+    sub: _getSub(),
 
     // constants
     entryPointAddress: EntryPointAddress,

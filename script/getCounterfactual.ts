@@ -2,7 +2,7 @@ import { getGoogleAccountAPI } from "./helper";
 
 async function main() {
   const walletAPI = await getGoogleAccountAPI();
-  console.log("Counterfactual address", await walletAPI.getAccountAddress());
+  console.log("Counterfactual address:", await walletAPI.getAccountAddress());
 }
 
 // We recommend this pattern to be able to use async/await everywhere

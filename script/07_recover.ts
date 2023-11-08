@@ -3,7 +3,7 @@ import { getGoogleAccountAPI, parseJwt } from "./helper";
 async function main() {
   const jwt = process.env.JWT;
   if (!jwt) {
-    console.error("JWT does not exist in `.env` file. Please run `npx hardhat 07_getJwt.ts`");
+    console.error("JWT does not exist in `.env` file. Please run `npx hardhat 06_getJwt.ts`");
     process.exit(1);
   }
 

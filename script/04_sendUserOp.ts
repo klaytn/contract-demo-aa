@@ -40,6 +40,7 @@ async function main() {
 
   const rpcClient = new HttpRpcClient(hre.network.config.bundler, EntryPointAddress, hre.network.config.chainId ?? 0);
   const userOpHash = await rpcClient.sendUserOpToBundler(userOp);
+  console.log("UserOpHash:", userOpHash);
 
   await waitUserOpReceipt(userOpHash);
   console.log("Done");

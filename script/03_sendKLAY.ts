@@ -6,6 +6,11 @@ async function main() {
 
     process.exit(1);
   }
+  if (!process.env.SUB) {
+    console.error("SUB does not exist in `.env` file. Please run `npx hardhat 02_getSubFromJwt.ts`");
+
+    process.exit(1);
+  }
 
   const [owner] = await hre.ethers.getSigners();
   const walletAPI = await getGoogleAccountAPI();

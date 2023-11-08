@@ -6,6 +6,8 @@ interface IGoogleAccount {
 
     function recoveryNonce() external view returns (uint256);
 
+    function owner() external view returns (address);
+
     function execute(address dest, uint256 value, bytes calldata func) external;
 
     function updateOwnerByGoogleOIDC(
