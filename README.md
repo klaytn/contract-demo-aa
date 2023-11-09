@@ -72,7 +72,8 @@ npx hardhat run script/readBoard.ts
 Open `.env` and comment out `PRIVATE_KEY`:
 
 ```
-# PRIVATE_KEY=0x...
+# PRIVATE_KEY=0x...             <<< change only this line
+INITIAL_OWNER_ADDRESS=0x...
 SUB=...
 ```
 
