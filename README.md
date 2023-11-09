@@ -4,6 +4,8 @@ ERC-4337 demo login contracts for OAuth recovery
 
 # Prerequisites
 
+- node@18 (configurable via [nvm](https://github.com/nvm-sh/nvm) or [devbox](https://github.com/jetpack-io/devbox))
+
 ```bash
 npm install
 
