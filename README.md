@@ -2,6 +2,8 @@
 
 ERC-4337 demo login contracts for OAuth recovery
 
+Forked from [contract-template](https://github.com/klaytn/contract-template)
+
 # Prerequisites
 
 - node@18 (configurable via [nvm](https://github.com/nvm-sh/nvm) or [devbox](https://github.com/jetpack-io/devbox))
@@ -9,8 +11,8 @@ ERC-4337 demo login contracts for OAuth recovery
 ```bash
 npm install
 
-# env setup; requires docker
 export HARDHAT_NETWORK=baobab
+alias hh='npx hardhat'
 ```
 
 # Steps
@@ -18,19 +20,19 @@ export HARDHAT_NETWORK=baobab
 ## 1. Create an owner key
 
 ```
-npx hardhat run script/01_createOwner.ts
+hh run script/01_createOwner.ts
 ```
 
 Go to the faucet and top up. Check by:
 
 ```
-npx hardhat accounts
+hh accounts
 ```
 
 ## 2. Get sub field from JWT
 
 ```
-npx hardhat run script/02_getSubFromJwt.ts
+hh run script/02_getSubFromJwt.ts
 ```
 
 Check by running `cat .env`:
@@ -44,13 +46,13 @@ SUB=...
 Counter factual can be calculated with `sub` from JWT and the initial owner's address.
 
 ```
-npx hardhat run script/getCounterfactual.ts
+hh run script/getCounterfactual.ts
 ```
 
 ## 3. Send KLAY to the counter factual address
 
 ```
-npx hardhat run script/03_sendKLAY.ts
+hh run script/03_sendKLAY.ts
 ```
 
 ## 4. Send UserOp
@@ -58,13 +60,13 @@ npx hardhat run script/03_sendKLAY.ts
 This UserOp writes a content to the board contract. It also supports Korean.
 
 ```
-CONTENT="Hello, my name is Teemo." npx hardhat run script/04_sendUserOp.ts
+CONTENT="Hello, my name is Teemo." hh run script/04_sendUserOp.ts
 ```
 
 Check the board:
 
 ```
-npx hardhat run script/readBoard.ts
+hh run script/readBoard.ts
 ```
 
 ## 5. Lose the previous owner key, and create a new one
@@ -80,25 +82,25 @@ SUB=...
 Then, run:
 
 ```
-npx hardhat run script/05_createNewOwner.ts
+hh run script/05_createNewOwner.ts
 ```
 
 Go to the faucet and top up. Check by:
 
 ```
-npx hardhat accounts
+hh accounts
 ```
 
 ## 6. Fetch JWT
 
 ```
-npx hardhat run script/06_getJwt.ts
+hh run script/06_getJwt.ts
 ```
 
 ## 7. Recover
 
 ```
-npx hardhat run script/07_recover.ts
+hh run script/07_recover.ts
 ```
 
 Try sending UserOp again with the new owner.
