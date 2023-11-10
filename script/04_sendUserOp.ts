@@ -6,6 +6,7 @@ async function createUserOp(content: string) {
   const board = await hre.ethers.getContractAt("Board", BoardAddress);
 
   return await walletAPI.createSignedUserOp({
+    gasLimit: 300000,
     target: BoardAddress,
     data: board.interface.encodeFunctionData("write(string)", [content]),
   });
