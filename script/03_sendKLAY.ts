@@ -17,7 +17,7 @@ async function main() {
   const counterfactualAddress = await walletAPI.getAccountAddress();
   const tx = await owner.sendTransaction({
     to: counterfactualAddress,
-    value: hre.ethers.utils.parseEther("1"),
+    value: hre.ethers.utils.parseEther("20"),
   });
   await tx.wait();
   const bal = await hre.ethers.provider.getBalance(counterfactualAddress);
